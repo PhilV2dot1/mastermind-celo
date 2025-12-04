@@ -1,101 +1,182 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useMastermind } from "@/hooks/useMastermind";
+import { ColorPalette } from "@/components/ColorPalette";
+import { CurrentGuess } from "@/components/CurrentGuess";
+import { GameHistory } from "@/components/GameHistory";
+import { GameControls } from "@/components/GameControls";
+import { GameStats } from "@/components/GameStats";
+import { ModeToggle } from "@/components/ModeToggle";
+import { WalletConnect } from "@/components/WalletConnect";
+import { FarcasterShare } from "@/components/FarcasterShare";
+import { MAX_ATTEMPTS } from "@/lib/game-logic";
+
+export default function MastermindGame() {
+  const {
+    mode,
+    gamePhase,
+    currentGuess,
+    history,
+    attempts,
+    message,
+    stats,
+    hasActiveOnChainGame,
+    address,
+    isConnected,
+    isPending,
+    updateGuess,
+    submitGuess,
+    newGame,
+    playOnChain,
+    submitScoreOnChain,
+    switchMode,
+    abandonGame,
+  } = useMastermind();
+
+  // Find first empty position in guess
+  const firstEmptyPosition = currentGuess.findIndex(c => c === null);
+
+  // Calculate score for display
+  const calculateDisplayScore = () => {
+    if (gamePhase === 'won') {
+      return Math.max(0, 100 - (attempts * 10));
+    }
+    return 0;
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen p-2 sm:p-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header - Compact for mobile */}
+        <header className="text-center mb-2 sm:mb-4">
+          <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 drop-shadow-sm">
+            🎯 Mastermind on Celo
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">
+            Crack the 4-color code in {MAX_ATTEMPTS} attempts!
+          </p>
+        </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        {/* Mode Toggle & Wallet Info - Compact row */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 mb-2 sm:mb-4">
+          <div className="flex justify-center">
+            <ModeToggle mode={mode} onToggle={switchMode} />
+          </div>
+
+          {/* Connected Wallet Display (On-Chain Mode) */}
+          {mode === 'onchain' && isConnected && address && (
+            <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-celo-yellow shadow-sm text-xs">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="font-mono text-gray-800 font-medium">
+                {address.slice(0, 6)}...{address.slice(-4)}
+              </span>
+            </div>
+          )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Wallet Connection (On-Chain Mode Only) */}
+        {mode === 'onchain' && !isConnected && (
+          <div className="mb-3">
+            <WalletConnect />
+          </div>
+        )}
+
+        {/* Message */}
+        {message && (
+          <div className="mb-2 p-2 sm:p-3 bg-white/90 backdrop-blur-sm border border-celo-yellow rounded-lg text-center font-semibold text-xs sm:text-sm text-gray-900 shadow-sm">
+            {message}
+          </div>
+        )}
+
+        {/* Main Game Area - Compact for mobile */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-3">
+          {/* Game Board (spans 2 columns on large screens) */}
+          <div className="lg:col-span-2 space-y-2 sm:space-y-3">
+            {/* Attempts Counter */}
+            <div className="text-center text-sm sm:text-base font-bold text-gray-900 bg-white/60 backdrop-blur-sm py-2 rounded-lg">
+              Attempt: {attempts} / {MAX_ATTEMPTS}
+            </div>
+
+            {/* Game History */}
+            <GameHistory history={history} maxAttempts={MAX_ATTEMPTS} />
+
+            {/* Current Guess & Color Palette (only during play) */}
+            {gamePhase === 'playing' && (
+              <>
+                <CurrentGuess
+                  guess={currentGuess}
+                  onClearPosition={(pos) => updateGuess(pos, null)}
+                  disabled={isPending}
+                />
+
+                {/* Color Palette */}
+                <ColorPalette
+                  onSelectColor={(color) => {
+                    if (firstEmptyPosition !== -1) {
+                      updateGuess(firstEmptyPosition, color);
+                    }
+                  }}
+                  disabled={isPending || firstEmptyPosition === -1}
+                />
+
+                {/* Submit Guess Button */}
+                <button
+                  onClick={submitGuess}
+                  disabled={isPending || currentGuess.some(c => c === null)}
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-3 sm:py-4 px-6 rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all touch-target"
+                >
+                  SUBMIT GUESS
+                </button>
+              </>
+            )}
+
+            {/* Game Controls */}
+            <GameControls
+              onNewGame={newGame}
+              onSubmitScore={mode === 'onchain' ? submitScoreOnChain : undefined}
+              onPlayOnChain={mode === 'onchain' ? playOnChain : undefined}
+              onAbandonGame={mode === 'onchain' ? abandonGame : undefined}
+              gamePhase={gamePhase}
+              mode={mode}
+              disabled={isPending}
+              isConnected={isConnected}
+              hasActiveOnChainGame={hasActiveOnChainGame}
+            />
+          </div>
+
+          {/* Stats Sidebar - Hidden on mobile when game is active */}
+          <div className={`${gamePhase === 'playing' ? 'hidden lg:block' : ''}`}>
+            <GameStats stats={stats} mode={mode} />
+          </div>
+        </div>
+
+        {/* Share Button (after game ends) - Compact */}
+        {gamePhase !== 'playing' && (
+          <div className="mb-3">
+            <FarcasterShare
+              gamePhase={gamePhase}
+              score={calculateDisplayScore()}
+              attempts={attempts}
+              stats={stats}
+            />
+          </div>
+        )}
+
+        {/* Footer - Smaller on mobile */}
+        <footer className="text-center text-gray-500 text-xs mt-4 sm:mt-8 pb-4">
+          <p className="hidden sm:block">
+            Built with ❤️ on{" "}
+            <a
+              href="https://celo.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-900 font-semibold hover:text-celo-yellow transition-colors"
+            >
+              Celo
+            </a>
+          </p>
+        </footer>
+      </div>
     </div>
   );
 }

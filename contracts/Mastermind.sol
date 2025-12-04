@@ -1,0 +1,129 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/**
+ * @title Mastermind
+ * @dev Smart contract for playing Mastermind code-breaking game on-chain
+ * @notice Players must pay to start a game, then can submit their score
+ */
+contract Mastermind {
+    uint256 public constant GAME_FEE = 0.01 ether; // Cost to start a game (~$0.01 USD)
+
+    struct PlayerStats {
+        uint256 wins;           // Games won
+        uint256 losses;         // Games lost
+        uint256 totalGames;
+        uint256 totalAttempts;  // Sum of all attempts (for average calculation)
+        uint256 bestScore;      // Highest score achieved
+        uint256 lastPlayed;
+    }
+
+    struct ActiveGame {
+        bool exists;
+        uint256 startTime;
+    }
+
+    mapping(address => PlayerStats) public playerStats;
+    mapping(address => ActiveGame) public activeGames;
+
+    uint256 public totalFeesCollected;
+
+    event GameStarted(address indexed player, uint256 timestamp);
+    event ScoreSubmitted(
+        address indexed player,
+        uint256 score,
+        bool won,
+        uint256 attempts,
+        uint256 timestamp
+    );
+
+    /**
+     * @dev Start a new on-chain game by paying the fee
+     */
+    function startGame() external payable {
+        require(msg.value == GAME_FEE, "Incorrect game fee");
+        require(!activeGames[msg.sender].exists, "Game already in progress");
+
+        activeGames[msg.sender] = ActiveGame({
+            exists: true,
+            startTime: block.timestamp
+        });
+
+        totalFeesCollected += msg.value;
+
+        emit GameStarted(msg.sender, block.timestamp);
+    }
+
+    /**
+     * @dev Submit a game score to the blockchain
+     * @param score The final score achieved (0-90 points)
+     * @param won Whether the player won
+     * @param attempts Number of attempts used (1-10)
+     */
+    function submitScore(uint256 score, bool won, uint256 attempts) external {
+        require(activeGames[msg.sender].exists, "No active game - start a game first");
+        require(attempts <= 10, "Invalid attempts");
+
+        // Clear active game
+        delete activeGames[msg.sender];
+
+        PlayerStats storage stats = playerStats[msg.sender];
+
+        // Update stats
+        if (won) {
+            stats.wins++;
+            stats.totalAttempts += attempts;
+            if (score > stats.bestScore) {
+                stats.bestScore = score;
+            }
+        } else {
+            stats.losses++;
+        }
+
+        stats.totalGames++;
+        stats.lastPlayed = block.timestamp;
+
+        emit ScoreSubmitted(msg.sender, score, won, attempts, block.timestamp);
+    }
+
+    /**
+     * @dev Get player statistics
+     * @param player The address of the player
+     * @return wins Number of wins
+     * @return losses Number of losses
+     * @return totalGames Total games played
+     * @return averageAttempts Average attempts per win
+     * @return bestScore Best score achieved
+     */
+    function getStats(address player) external view returns (
+        uint256 wins,
+        uint256 losses,
+        uint256 totalGames,
+        uint256 averageAttempts,
+        uint256 bestScore
+    ) {
+        PlayerStats memory stats = playerStats[player];
+        uint256 avgAttempts = stats.wins > 0
+            ? stats.totalAttempts / stats.wins
+            : 0;
+
+        return (
+            stats.wins,
+            stats.losses,
+            stats.totalGames,
+            avgAttempts,
+            stats.bestScore
+        );
+    }
+
+    /**
+     * @dev Check if player has an active game
+     * @param player The address to check
+     * @return exists Whether the player has an active game
+     * @return startTime When the game was started
+     */
+    function hasActiveGame(address player) external view returns (bool exists, uint256 startTime) {
+        ActiveGame memory game = activeGames[player];
+        return (game.exists, game.startTime);
+    }
+}
