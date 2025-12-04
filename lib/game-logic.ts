@@ -40,15 +40,15 @@ export function evaluateGuess(secret: Code, guess: Code): Feedback {
   let blackPegs = 0;
   let whitePegs = 0;
 
-  const secretCopy = [...secret];
-  const guessCopy = [...guess];
+  const secretCopy: (Color | null)[] = [...secret];
+  const guessCopy: (Color | null)[] = [...guess];
 
   // First pass: count black pegs (exact matches)
   for (let i = 0; i < CODE_LENGTH; i++) {
     if (guessCopy[i] === secretCopy[i]) {
       blackPegs++;
-      secretCopy[i] = null as any; // Mark as used
-      guessCopy[i] = null as any;
+      secretCopy[i] = null; // Mark as used
+      guessCopy[i] = null;
     }
   }
 
@@ -58,7 +58,7 @@ export function evaluateGuess(secret: Code, guess: Code): Feedback {
       const matchIndex = secretCopy.findIndex(c => c === guessCopy[i]);
       if (matchIndex !== -1) {
         whitePegs++;
-        secretCopy[matchIndex] = null as any; // Mark as used
+        secretCopy[matchIndex] = null; // Mark as used
       }
     }
   }
