@@ -9,6 +9,7 @@ import { GameStats } from "@/components/GameStats";
 import { ModeToggle } from "@/components/ModeToggle";
 import { WalletConnect } from "@/components/WalletConnect";
 import { FarcasterShare } from "@/components/FarcasterShare";
+import { FeedbackLegend } from "@/components/FeedbackLegend";
 import { MAX_ATTEMPTS } from "@/lib/game-logic";
 
 export default function MastermindGame() {
@@ -96,6 +97,9 @@ export default function MastermindGame() {
             <div className="text-center text-sm sm:text-base font-bold text-gray-900 bg-white/60 backdrop-blur-sm py-2 rounded-lg">
               Attempt: {attempts} / {MAX_ATTEMPTS}
             </div>
+
+            {/* Feedback Legend */}
+            <FeedbackLegend />
 
             {/* Game History */}
             <GameHistory history={history} maxAttempts={MAX_ATTEMPTS} />
