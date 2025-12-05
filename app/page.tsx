@@ -22,7 +22,6 @@ export default function MastermindGame() {
     message,
     stats,
     hasActiveOnChainGame,
-    address,
     isConnected,
     isPending,
     updateGuess,
