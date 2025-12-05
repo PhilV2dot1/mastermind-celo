@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
-const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+// Auto-detect production URL or use environment variable
+const baseUrl = process.env.NEXT_PUBLIC_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
 export const metadata: Metadata = {
   title: "Mastermind on Celo",

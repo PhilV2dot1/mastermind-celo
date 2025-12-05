@@ -275,6 +275,16 @@ export function useMastermind() {
       return;
     }
 
+    // Check if user has an active on-chain game
+    if (!hasActiveOnChainGame) {
+      setMessage('❌ You must start an on-chain game first! Click "START GAME (0.01 CELO)" before playing to record your score on-chain.');
+      setTimeout(() => {
+        setMessage('');
+        newGame(); // Reset to allow starting a new on-chain game
+      }, 5000);
+      return;
+    }
+
     const won = gamePhase === 'won';
     const score = calculateScore(won, attempts);
 
@@ -311,7 +321,7 @@ export function useMastermind() {
       console.error('❌ Failed to submit score:', error);
       setMessage('❌ Failed to submit score - Please try again');
     }
-  }, [isConnected, address, mode, gamePhase, attempts, chain, switchChain, writeContract, resetWrite]);
+  }, [isConnected, address, mode, gamePhase, attempts, chain, switchChain, writeContract, resetWrite, hasActiveOnChainGame, newGame]);
 
   // Abandon current on-chain game
   const abandonGame = useCallback(async () => {
