@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/.well-known/farcaster.json',
-        destination: 'https://api.farcaster.xyz/miniapps/hosted-manifest/YOUR_UUID_HERE',
+        destination: 'https://api.farcaster.xyz/miniapps/hosted-manifest/019aebe0-0a84-bebb-914b-3cca14695652',
         permanent: false,
         statusCode: 307,
       },
