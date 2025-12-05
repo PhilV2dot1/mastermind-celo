@@ -10,7 +10,7 @@ interface ColorPaletteProps {
 
 export function ColorPalette({ onSelectColor, disabled }: ColorPaletteProps) {
   return (
-    <div className="flex flex-wrap justify-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/90 backdrop-blur-sm rounded-lg border border-celo-yellow shadow-sm">
+    <div className="flex flex-wrap justify-center gap-2 sm:gap-4 p-2 sm:p-4 bg-white/90 backdrop-blur-sm rounded-lg border border-celo-yellow shadow-sm">
       {COLORS.map(color => (
         <ColorPeg
           key={color}

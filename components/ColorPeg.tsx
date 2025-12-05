@@ -12,9 +12,9 @@ interface ColorPegProps {
 
 export function ColorPeg({ color, size = 'medium', onClick, showEmpty = true }: ColorPegProps) {
   const sizeClasses = {
-    small: 'w-8 h-8',
-    medium: 'w-11 h-11 sm:w-12 sm:h-12',
-    large: 'w-12 h-12 sm:w-14 sm:h-14',
+    small: 'w-6 h-6 sm:w-8 sm:h-8',
+    medium: 'w-9 h-9 sm:w-11 sm:h-11',
+    large: 'w-11 h-11 sm:w-14 sm:h-14',
   };
 
   if (!color && !showEmpty) return null;
@@ -27,7 +27,7 @@ export function ColorPeg({ color, size = 'medium', onClick, showEmpty = true }: 
       whileTap={onClick ? { scale: 0.95 } : {}}
       onClick={onClick}
       disabled={!onClick}
-      className={`${sizeClasses[size]} rounded-full border-4 ${
+      className={`${sizeClasses[size]} rounded-full border-2 sm:border-4 ${
         onClick ? 'cursor-pointer' : 'cursor-default'
       }`}
       style={{

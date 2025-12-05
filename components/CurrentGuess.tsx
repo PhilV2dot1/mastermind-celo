@@ -12,7 +12,7 @@ interface CurrentGuessProps {
 
 export function CurrentGuess({ guess, onClearPosition, disabled }: CurrentGuessProps) {
   return (
-    <div className="flex justify-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/90 backdrop-blur-sm rounded-lg border border-celo-yellow shadow-sm">
+    <div className="flex justify-center gap-2 sm:gap-4 p-2 sm:p-4 bg-white/90 backdrop-blur-sm rounded-lg border border-celo-yellow shadow-sm">
       {guess.map((color, i) => (
         <div key={i} className="relative">
           <ColorPeg

@@ -12,11 +12,11 @@ interface GuessRowProps {
 
 export function GuessRow({ guess, feedback, isActive }: GuessRowProps) {
   return (
-    <div className={`flex items-center justify-between gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg ${
+    <div className={`flex items-center justify-between gap-1 sm:gap-3 p-1.5 sm:p-3 rounded-lg ${
       isActive ? 'bg-white/90 border border-celo-yellow' : 'bg-white/60 border border-gray-200'
     }`}>
       {/* Guess pegs */}
-      <div className="flex gap-2">
+      <div className="flex gap-1 sm:gap-2">
         {guess.map((color, i) => (
           <ColorPeg key={i} color={color} size="medium" />
         ))}
