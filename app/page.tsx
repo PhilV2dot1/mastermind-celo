@@ -90,9 +90,9 @@ export default function MastermindGame() {
         )}
 
         {/* Main Game Area - Compact for mobile */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-3">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-4 mb-2 sm:mb-3">
           {/* Game Board (spans 2 columns on large screens) */}
-          <div className="lg:col-span-2 space-y-2 sm:space-y-3">
+          <div className="lg:col-span-2 space-y-1.5 sm:space-y-3">
             {/* Attempts Counter */}
             <div className="text-center text-sm sm:text-base font-bold text-gray-900 bg-white/60 backdrop-blur-sm py-2 rounded-lg">
               Attempt: {attempts} / {MAX_ATTEMPTS}
