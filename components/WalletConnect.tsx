@@ -47,28 +47,39 @@ export function WalletConnect() {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-celo-yellow/30 to-gray-100 border-2 border-celo-yellow rounded-xl p-4 flex items-center justify-between"
+        className="bg-gradient-to-r from-celo-yellow/30 to-gray-100 border-2 border-celo-yellow rounded-xl p-4"
       >
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <div className="flex flex-col">
-            <span className="font-mono text-sm font-semibold text-gray-800">
-              {address.slice(0, 6)}...{address.slice(-4)}
-            </span>
-            {activeConnector && (
-              <span className="text-xs text-gray-600">
-                via {activeConnector.name}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <div className="flex flex-col">
+              <span className="font-mono text-sm font-semibold text-gray-800">
+                {address.slice(0, 6)}...{address.slice(-4)}
               </span>
-            )}
+              {activeConnector && (
+                <span className="text-xs text-gray-600">
+                  via {activeConnector.name}
+                </span>
+              )}
+            </div>
           </div>
         </div>
-        <button
-          onClick={() => disconnect()}
-          className="px-4 py-2 min-h-[44px] bg-gray-700 hover:bg-gray-800 active:bg-gray-900 text-white rounded-lg transition-colors text-sm font-semibold touch-manipulation"
-          aria-label="Disconnect wallet"
-        >
-          Disconnect
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => disconnect()}
+            className="flex-1 px-3 py-2 min-h-[44px] bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-xs font-semibold touch-manipulation"
+            aria-label="Change wallet"
+          >
+            🔄 Change
+          </button>
+          <button
+            onClick={() => disconnect()}
+            className="flex-1 px-3 py-2 min-h-[44px] bg-gray-700 hover:bg-gray-800 active:bg-gray-900 text-white rounded-lg transition-colors text-xs font-semibold touch-manipulation"
+            aria-label="Disconnect wallet"
+          >
+            Disconnect
+          </button>
+        </div>
       </motion.div>
     );
   }
