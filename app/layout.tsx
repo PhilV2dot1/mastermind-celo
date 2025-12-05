@@ -19,8 +19,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: `${baseUrl}/og-image.png`,
-        width: 1200,
-        height: 630,
+        width: 2400,
+        height: 1600,
         alt: "Mastermind on Celo - Crack the Code",
       },
     ],
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     // Farcaster Frame tags
     "fc:frame": "vNext",
     "fc:frame:image": `${baseUrl}/og-image.png`,
-    "fc:frame:image:aspect_ratio": "1.91:1",
+    "fc:frame:image:aspect_ratio": "1.5:1",
     "fc:frame:button:1": "Play Mastermind",
     "fc:frame:button:1:action": "link",
     "fc:frame:button:1:target": baseUrl,
