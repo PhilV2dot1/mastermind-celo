@@ -45,9 +45,9 @@ const iconSVG = `
 </svg>
 `;
 
-// SVG for OG image (2400x1600 - Farcaster 3:2 ratio @2x) - EXACT Blackjack style
+// SVG for OG image (1200x630 - Standard OG format) - Blackjack style
 const ogImageSVG = `
-<svg width="2400" height="1600" viewBox="0 0 2400 1600" xmlns="http://www.w3.org/2000/svg">
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <!-- Gradient background - Yellow to Gray like Blackjack -->
   <defs>
     <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -58,65 +58,52 @@ const ogImageSVG = `
   </defs>
 
   <!-- Background -->
-  <rect width="2400" height="1600" fill="url(#bgGradient)"/>
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
 
   <!-- White card on left with yellow border -->
-  <rect x="220" y="420" width="450" height="760" rx="60" fill="white" stroke="#FCFF52" stroke-width="12"/>
+  <rect x="110" y="165" width="225" height="300" rx="30" fill="white" stroke="#FCFF52" stroke-width="6"/>
 
   <!-- Yellow sparkle at top -->
-  <text x="444" y="520" font-size="48" text-anchor="middle" fill="#FCFF52">✦</text>
+  <text x="222" y="210" font-size="24" text-anchor="middle" fill="#FCFF52">✦</text>
 
   <!-- Mastermind pegs - 2 rows of 4 -->
   <!-- Top row of pegs -->
-  <circle cx="320" cy="710" r="40" fill="#ef4444" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="312" cy="702" r="12" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="160" cy="280" r="20" fill="#ef4444" stroke="rgba(0,0,0,0.2)" stroke-width="2"/>
+  <circle cx="156" cy="276" r="6" fill="rgba(255,255,255,0.4)"/>
 
-  <circle cx="416" cy="710" r="40" fill="#3b82f6" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="408" cy="702" r="12" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="208" cy="280" r="20" fill="#3b82f6" stroke="rgba(0,0,0,0.2)" stroke-width="2"/>
+  <circle cx="204" cy="276" r="6" fill="rgba(255,255,255,0.4)"/>
 
-  <circle cx="512" cy="710" r="40" fill="#22c55e" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="504" cy="702" r="12" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="256" cy="280" r="20" fill="#22c55e" stroke="rgba(0,0,0,0.2)" stroke-width="2"/>
+  <circle cx="252" cy="276" r="6" fill="rgba(255,255,255,0.4)"/>
 
-  <circle cx="608" cy="710" r="40" fill="#eab308" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="600" cy="702" r="12" fill="rgba(255,255,255,0.4)"/>
-
-  <!-- Middle row of pegs -->
-  <circle cx="320" cy="880" r="40" fill="#f97316" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="312" cy="872" r="12" fill="rgba(255,255,255,0.4)"/>
-
-  <circle cx="416" cy="880" r="40" fill="#a855f7" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="408" cy="872" r="12" fill="rgba(255,255,255,0.4)"/>
-
-  <circle cx="512" cy="880" r="40" fill="#ef4444" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="504" cy="872" r="12" fill="rgba(255,255,255,0.4)"/>
-
-  <circle cx="608" cy="880" r="40" fill="#3b82f6" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="600" cy="872" r="12" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="304" cy="280" r="20" fill="#eab308" stroke="rgba(0,0,0,0.2)" stroke-width="2"/>
+  <circle cx="300" cy="276" r="6" fill="rgba(255,255,255,0.4)"/>
 
   <!-- Bottom row of pegs -->
-  <circle cx="320" cy="1050" r="40" fill="#22c55e" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="312" cy="1042" r="12" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="160" cy="370" r="20" fill="#f97316" stroke="rgba(0,0,0,0.2)" stroke-width="2"/>
+  <circle cx="156" cy="366" r="6" fill="rgba(255,255,255,0.4)"/>
 
-  <circle cx="416" cy="1050" r="40" fill="#eab308" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="408" cy="1042" r="12" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="208" cy="370" r="20" fill="#a855f7" stroke="rgba(0,0,0,0.2)" stroke-width="2"/>
+  <circle cx="204" cy="366" r="6" fill="rgba(255,255,255,0.4)"/>
 
-  <circle cx="512" cy="1050" r="40" fill="#f97316" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="504" cy="1042" r="12" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="256" cy="370" r="20" fill="#ef4444" stroke="rgba(0,0,0,0.2)" stroke-width="2"/>
+  <circle cx="252" cy="366" r="6" fill="rgba(255,255,255,0.4)"/>
 
-  <circle cx="608" cy="1050" r="40" fill="#a855f7" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-  <circle cx="600" cy="1042" r="12" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="304" cy="370" r="20" fill="#3b82f6" stroke="rgba(0,0,0,0.2)" stroke-width="2"/>
+  <circle cx="300" cy="366" r="6" fill="rgba(255,255,255,0.4)"/>
 
   <!-- Text on the right -->
   <!-- Main title -->
-  <text x="880" y="595" font-size="140" font-weight="bold" fill="#1a1a1a" font-family="Arial, sans-serif">Mastermind on Celo</text>
+  <text x="440" y="235" font-size="70" font-weight="bold" fill="#1a1a1a" font-family="Arial, sans-serif">Mastermind on Celo</text>
 
   <!-- Subtitle -->
-  <text x="880" y="760" font-size="68" fill="#374151" font-family="Arial, sans-serif">Crack the code on Celo blockchain</text>
+  <text x="440" y="300" font-size="34" fill="#374151" font-family="Arial, sans-serif">Crack the code on Celo blockchain</text>
 
   <!-- Features with checkmarks -->
-  <text x="880" y="950" font-size="56" fill="#6b7280" font-family="Arial, sans-serif">✓ Free or On-Chain mode</text>
-  <text x="880" y="1080" font-size="56" fill="#6b7280" font-family="Arial, sans-serif">✓ 10 attempts to crack the code</text>
-  <text x="880" y="1210" font-size="56" fill="#6b7280" font-family="Arial, sans-serif">✓ Powered by Farcaster</text>
+  <text x="440" y="375" font-size="28" fill="#6b7280" font-family="Arial, sans-serif">✓ Free or On-Chain mode</text>
+  <text x="440" y="425" font-size="28" fill="#6b7280" font-family="Arial, sans-serif">✓ 10 attempts to crack the code</text>
+  <text x="440" y="475" font-size="28" fill="#6b7280" font-family="Arial, sans-serif">✓ Powered by Farcaster</text>
 </svg>
 `;
 
