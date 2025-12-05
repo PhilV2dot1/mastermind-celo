@@ -42,7 +42,7 @@ export function GameControls({
             whileTap={{ scale: 0.95 }}
             onClick={onAbandonGame}
             disabled={disabled}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 sm:py-3 px-4 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm touch-target"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95"
           >
             {disabled ? 'ABANDONING...' : 'ABANDON GAME'}
           </motion.button>
@@ -55,7 +55,10 @@ export function GameControls({
           whileTap={{ scale: 0.95 }}
           onClick={onPlayOnChain}
           disabled={disabled}
-          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm touch-target"
+          className="w-full bg-gradient-to-r from-celo-yellow to-yellow-400 hover:from-yellow-400 hover:to-yellow-500 text-gray-900 font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95"
+          style={{
+            boxShadow: "0 0 0 2px #FCFF52, 0 10px 15px -3px rgba(0, 0, 0, 0.2)"
+          }}
         >
           {disabled ? 'STARTING...' : 'START GAME (0.01 CELO)'}
         </motion.button>
@@ -67,7 +70,10 @@ export function GameControls({
           whileTap={{ scale: 0.95 }}
           onClick={onNewGame}
           disabled={disabled}
-          className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm touch-target"
+          className="w-full bg-gradient-to-r from-celo-yellow to-yellow-400 hover:from-yellow-400 hover:to-yellow-500 text-gray-900 font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95"
+          style={{
+            boxShadow: "0 0 0 2px #FCFF52, 0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+          }}
         >
           {gamePhase === 'playing' ? 'NEW GAME' : 'PLAY AGAIN'}
         </motion.button>
@@ -79,7 +85,7 @@ export function GameControls({
           whileTap={{ scale: 0.95 }}
           onClick={onSubmitScore}
           disabled={disabled}
-          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm touch-target"
+          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95"
         >
           {disabled ? 'SUBMITTING...' : 'SUBMIT SCORE'}
         </motion.button>
