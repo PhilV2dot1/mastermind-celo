@@ -7,6 +7,7 @@ const baseUrl = process.env.NEXT_PUBLIC_URL ||
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "Mastermind on Celo",
   description: "Crack the secret code! Play Mastermind on-chain with Celo blockchain.",
   manifest: "/manifest.json",
