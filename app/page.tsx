@@ -58,25 +58,13 @@ export default function MastermindGame() {
           </p>
         </header>
 
-        {/* Mode Toggle & Wallet Info - Compact row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 mb-2 sm:mb-4">
-          <div className="flex justify-center">
-            <ModeToggle mode={mode} onToggle={switchMode} />
-          </div>
-
-          {/* Connected Wallet Display (On-Chain Mode) */}
-          {mode === 'onchain' && isConnected && address && (
-            <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-celo-yellow shadow-sm text-xs">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="font-mono text-gray-800 font-medium">
-                {address.slice(0, 6)}...{address.slice(-4)}
-              </span>
-            </div>
-          )}
+        {/* Mode Toggle - Centered */}
+        <div className="flex justify-center mb-2 sm:mb-4">
+          <ModeToggle mode={mode} onToggle={switchMode} />
         </div>
 
         {/* Wallet Connection (On-Chain Mode Only) */}
-        {mode === 'onchain' && !isConnected && (
+        {mode === 'onchain' && (
           <div className="mb-3">
             <WalletConnect />
           </div>
