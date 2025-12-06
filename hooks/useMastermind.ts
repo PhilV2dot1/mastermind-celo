@@ -112,11 +112,29 @@ export function useMastermind() {
   useEffect(() => {
     if (isConnected && address && mode === 'onchain') {
       console.log('🔄 Wallet connected, refetching active game state...');
-      const timer = setTimeout(() => {
+
+      // Immediate refetch
+      refetchActiveGame();
+      refetchStats();
+
+      // Second refetch after 500ms
+      const timer1 = setTimeout(() => {
+        console.log('🔄 Second refetch...');
         refetchActiveGame();
         refetchStats();
       }, 500);
-      return () => clearTimeout(timer);
+
+      // Third refetch after 1.5s to ensure we have correct state
+      const timer2 = setTimeout(() => {
+        console.log('🔄 Final refetch...');
+        refetchActiveGame();
+        refetchStats();
+      }, 1500);
+
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
     }
   }, [isConnected, address, mode, refetchActiveGame, refetchStats]);
 
@@ -195,6 +213,20 @@ export function useMastermind() {
         setMessage('❌ Insufficient funds for transaction');
       } else if (errorMessage.includes('already has an active game')) {
         setMessage('❌ You already have an active game. Abandon it first.');
+      } else if (errorMessage.includes('1002') || errorMessage.includes('Invalid score')) {
+        // Error #1002 means no active game - frontend state is wrong!
+        console.error('❌ State mismatch detected! Forcing refetch...');
+        setMessage('🔄 Syncing game state...');
+
+        // Force immediate refetch to correct the state
+        refetchActiveGame();
+        refetchStats();
+
+        setTimeout(() => {
+          refetchActiveGame();
+          refetchStats();
+          setMessage('');
+        }, 1000);
       } else {
         setMessage(`❌ Transaction failed: ${errorMessage.slice(0, 50)}...`);
       }
@@ -204,7 +236,7 @@ export function useMastermind() {
         setMessage('');
       }, 5000);
     }
-  }, [writeError]);
+  }, [writeError, refetchActiveGame, refetchStats]);
 
   // Update stats when game ends (free mode only)
   const updateStatsOnGameEnd = useCallback((won: boolean, attemptsUsed: number) => {
