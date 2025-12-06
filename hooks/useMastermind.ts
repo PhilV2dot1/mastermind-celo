@@ -126,6 +126,15 @@ export function useMastermind() {
       console.log('✅ Transaction receipt received:', receipt.transactionHash);
       console.log('Transaction type:', lastTransactionType);
 
+      // Only process if we have a transaction type (avoid double processing)
+      if (!lastTransactionType) {
+        console.log('⏭️ Skipping - already processed');
+        return;
+      }
+
+      // Capture transaction type before clearing it
+      const txType = lastTransactionType;
+
       // Show success message
       setMessage('✅ Transaction completed successfully!');
 
@@ -151,19 +160,20 @@ export function useMastermind() {
 
         // Only reset game after submitScore (abandon or real score)
         // Don't reset after startGame - user needs to play!
-        if (lastTransactionType === 'submitScore') {
+        if (txType === 'submitScore') {
           setTimeout(() => {
             console.log('🎮 Resetting game state after score submission');
             newGame();
-            setLastTransactionType(null);
           }, 2500);
-        } else if (lastTransactionType === 'startGame') {
+        } else if (txType === 'startGame') {
           console.log('✅ Game started - ready to play!');
-          setLastTransactionType(null);
         }
       };
 
       refetchData();
+
+      // Clear transaction type immediately to prevent double processing
+      setLastTransactionType(null);
 
       setTimeout(() => {
         setMessage('');
