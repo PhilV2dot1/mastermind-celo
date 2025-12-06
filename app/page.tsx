@@ -22,7 +22,6 @@ export default function MastermindGame() {
     message,
     stats,
     hasActiveOnChainGame,
-    isConnected,
     isPending,
     updateGuess,
     submitGuess,
@@ -132,13 +131,9 @@ export default function MastermindGame() {
             <GameControls
               onNewGame={newGame}
               onSubmitScore={mode === 'onchain' ? submitScoreOnChain : undefined}
-              onPlayOnChain={mode === 'onchain' ? playOnChain : undefined}
-              onAbandonGame={mode === 'onchain' ? abandonGame : undefined}
               gamePhase={gamePhase}
               mode={mode}
               disabled={isPending}
-              isConnected={isConnected}
-              hasActiveOnChainGame={hasActiveOnChainGame}
             />
           </div>
 

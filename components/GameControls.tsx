@@ -7,25 +7,17 @@ type GamePhase = 'playing' | 'won' | 'lost';
 interface GameControlsProps {
   onNewGame: () => void;
   onSubmitScore?: () => void;
-  onPlayOnChain?: () => void;
-  onAbandonGame?: () => void;
   gamePhase: GamePhase;
   mode: 'free' | 'onchain';
   disabled: boolean;
-  isConnected?: boolean;
-  hasActiveOnChainGame?: boolean;
 }
 
 export function GameControls({
   onNewGame,
   onSubmitScore,
-  onPlayOnChain,
-  onAbandonGame,
   gamePhase,
   mode,
   disabled,
-  isConnected,
-  hasActiveOnChainGame,
 }: GameControlsProps) {
   return (
     <div className="flex flex-col gap-2">
