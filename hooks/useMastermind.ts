@@ -65,6 +65,8 @@ export function useMastermind() {
     args: address ? [address] : undefined,
     query: {
       enabled: isConnected && mode === 'onchain' && CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000",
+      gcTime: 0, // Don't cache - always fetch fresh data
+      staleTime: 0, // Consider data immediately stale
     },
   });
 
@@ -76,6 +78,8 @@ export function useMastermind() {
     args: address ? [address] : undefined,
     query: {
       enabled: isConnected && mode === 'onchain' && CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000",
+      gcTime: 0, // Don't cache - always fetch fresh data
+      staleTime: 0, // Consider data immediately stale
     },
   });
 
@@ -123,18 +127,31 @@ export function useMastermind() {
       // Show success message
       setMessage('✅ Transaction completed successfully!');
 
-      // Refetch active game state and stats
+      // Refetch active game state and stats with multiple attempts
       const refetchData = async () => {
-        console.log('🔄 Refetching active game and stats...');
-        await refetchActiveGame();
-        await refetchStats();
-        console.log('✅ Refetch completed');
+        console.log('🔄 Refetching active game and stats (attempt 1)...');
+        refetchActiveGame();
+        refetchStats();
 
-        // Small delay to ensure state updates, then reset game
+        // Second refetch after 1 second to ensure blockchain state is updated
+        setTimeout(() => {
+          console.log('🔄 Refetching again (attempt 2)...');
+          refetchActiveGame();
+          refetchStats();
+        }, 1000);
+
+        // Third refetch after 2 seconds
+        setTimeout(() => {
+          console.log('🔄 Final refetch (attempt 3)...');
+          refetchActiveGame();
+          refetchStats();
+        }, 2000);
+
+        // Reset game after giving time for refetches
         setTimeout(() => {
           console.log('🎮 Resetting game state');
           newGame();
-        }, 500);
+        }, 2500);
       };
 
       refetchData();
