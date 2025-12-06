@@ -65,7 +65,12 @@ export default function MastermindGame() {
         {/* Wallet Connection (On-Chain Mode Only) */}
         {mode === 'onchain' && (
           <div className="mb-3">
-            <WalletConnect />
+            <WalletConnect
+              mode={mode}
+              hasActiveOnChainGame={hasActiveOnChainGame}
+              onPlayOnChain={playOnChain}
+              gameIsPending={isPending}
+            />
           </div>
         )}
 
