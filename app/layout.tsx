@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mastermind on Celo",
     description: "Crack the 4-color code in 10 attempts. Play free or compete on-chain!",
+    url: baseUrl,
+    siteName: "Mastermind on Celo",
+    type: "website",
     images: [
       {
         url: `${baseUrl}/og-image.png`,
@@ -36,8 +39,6 @@ export const metadata: Metadata = {
         alt: "Mastermind on Celo - Crack the Code",
       },
     ],
-    type: "website",
-    siteName: "Mastermind on Celo",
   },
   twitter: {
     card: "summary_large_image",
@@ -50,6 +51,14 @@ export const metadata: Metadata = {
     apple: "/icon.png",
   },
   other: {
+    // Farcaster Frame tags
+    "fc:frame": "vNext",
+    "fc:frame:image": `${baseUrl}/og-image.png`,
+    "fc:frame:image:aspect_ratio": "1.91:1",
+    "fc:frame:button:1": "Play Mastermind",
+    "fc:frame:button:1:action": "link",
+    "fc:frame:button:1:target": baseUrl,
+    // Farcaster Mini-app
     "fc:miniapp": JSON.stringify({
       version: "1",
       imageUrl: `${baseUrl}/og-image.png`,
