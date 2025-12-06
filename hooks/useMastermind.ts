@@ -53,7 +53,7 @@ export function useMastermind() {
 
   // Wagmi hooks
   const { address, isConnected, chain } = useAccount();
-  const { writeContract, data: hash, isPending, reset: resetWrite } = useWriteContract();
+  const { writeContract, data: hash, isPending, error: writeError, reset: resetWrite } = useWriteContract();
   const { data: receipt, isLoading: isConfirming } = useWaitForTransactionReceipt({ hash });
   const { switchChain } = useSwitchChain();
 
@@ -114,6 +114,31 @@ export function useMastermind() {
       }, 3000);
     }
   }, [receipt, refetchStats, refetchActiveGame]);
+
+  // Handle write contract errors
+  useEffect(() => {
+    if (writeError) {
+      console.error('❌ Write contract error:', writeError);
+
+      // Extract user-friendly error message
+      const errorMessage = writeError.message || 'Unknown error';
+
+      if (errorMessage.includes('User rejected') || errorMessage.includes('User denied')) {
+        setMessage('❌ Transaction cancelled by user');
+      } else if (errorMessage.includes('insufficient funds')) {
+        setMessage('❌ Insufficient funds for transaction');
+      } else if (errorMessage.includes('already has an active game')) {
+        setMessage('❌ You already have an active game. Abandon it first.');
+      } else {
+        setMessage(`❌ Transaction failed: ${errorMessage.slice(0, 50)}...`);
+      }
+
+      // Clear error message after 5 seconds
+      setTimeout(() => {
+        setMessage('');
+      }, 5000);
+    }
+  }, [writeError]);
 
   // Update stats when game ends (free mode only)
   const updateStatsOnGameEnd = useCallback((won: boolean, attemptsUsed: number) => {
@@ -255,22 +280,29 @@ export function useMastermind() {
 
   // Submit score on-chain
   const submitScoreOnChain = useCallback(async () => {
+    console.log('🎯 submitScoreOnChain called');
+    console.log('State:', { isConnected, address, mode, gamePhase, attempts });
+
     if (!isConnected) {
+      console.log('❌ Not connected');
       setMessage('❌ Please connect your wallet first');
       return;
     }
 
     if (!address) {
+      console.log('❌ No address');
       setMessage('❌ Wallet address not found');
       return;
     }
 
     if (mode !== 'onchain') {
+      console.log('❌ Wrong mode:', mode);
       setMessage('❌ Switch to On-Chain mode first');
       return;
     }
 
     if (gamePhase === 'playing') {
+      console.log('❌ Game still playing');
       setMessage('❌ Finish the game first');
       return;
     }
@@ -279,25 +311,35 @@ export function useMastermind() {
     const score = calculateScore(won, attempts);
 
     try {
+      console.log('✅ All checks passed. Resetting write state...');
       // Reset previous transaction state
       resetWrite?.();
 
       // Check if we're on the correct chain (Celo)
+      console.log('Current chain:', chain?.id, 'Expected:', celo.id);
       if (chain?.id !== celo.id) {
         setMessage('⚡ Switching to Celo network...');
+        console.log('🔄 Switching to Celo network...');
         try {
           await switchChain?.({ chainId: celo.id });
           // Give wallet time to switch
           await new Promise(resolve => setTimeout(resolve, 500));
+          console.log('✅ Switched to Celo network');
         } catch (switchError) {
-          console.error('Chain switch error:', switchError);
+          console.error('❌ Chain switch error:', switchError);
           setMessage('❌ Please switch to Celo network in your wallet');
           return;
         }
       }
 
       setMessage('⏳ Submitting score on-chain...');
-      console.log('📤 Submitting score:', score, 'Won:', won, 'Attempts:', attempts);
+      console.log('📤 Calling writeContract with:', {
+        address: CONTRACT_ADDRESS,
+        functionName: 'submitScore',
+        args: [BigInt(score), won, BigInt(attempts)],
+        chainId: celo.id,
+        gas: BigInt(200000),
+      });
 
       writeContract({
         address: CONTRACT_ADDRESS,
@@ -307,6 +349,8 @@ export function useMastermind() {
         chainId: celo.id,
         gas: BigInt(200000),
       });
+
+      console.log('✅ writeContract called successfully');
     } catch (error) {
       console.error('❌ Failed to submit score:', error);
       setMessage('❌ Failed to submit score - Please try again');

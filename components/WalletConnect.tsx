@@ -22,10 +22,12 @@ interface WalletConnectProps {
   mode?: 'free' | 'onchain';
   hasActiveOnChainGame?: boolean;
   onPlayOnChain?: () => void;
+  onAbandonGame?: () => void;
   gameIsPending?: boolean;
+  abandonPending?: boolean;
 }
 
-export function WalletConnect({ mode, hasActiveOnChainGame, onPlayOnChain, gameIsPending }: WalletConnectProps = {}) {
+export function WalletConnect({ mode, hasActiveOnChainGame, onPlayOnChain, onAbandonGame, gameIsPending, abandonPending }: WalletConnectProps = {}) {
   const { address, isConnected, connector: activeConnector } = useAccount();
   const { connect, connectors, isPending, error } = useConnect();
   const { disconnect } = useDisconnect();
@@ -87,6 +89,32 @@ export function WalletConnect({ mode, hasActiveOnChainGame, onPlayOnChain, gameI
             Disconnect
           </button>
         </div>
+
+        {/* Abandon Game UI - shown when active game exists */}
+        {mode === 'onchain' && hasActiveOnChainGame && onAbandonGame && (
+          <div className="bg-orange-50 border-2 border-orange-400 rounded-lg p-3 mb-3">
+            <p className="text-orange-800 text-xs font-semibold mb-1">
+              ⚠️ Active on-chain game detected
+            </p>
+            <p className="text-orange-700 text-xs mb-2">
+              Abandon incomplete game to start fresh.
+            </p>
+            <button
+              onClick={onAbandonGame}
+              disabled={abandonPending}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg shadow-md transform hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              {abandonPending ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Abandoning...</span>
+                </div>
+              ) : (
+                'ABANDON GAME'
+              )}
+            </button>
+          </div>
+        )}
 
         {/* START GAME button for on-chain mode when no active game */}
         {mode === 'onchain' && !hasActiveOnChainGame && onPlayOnChain && (

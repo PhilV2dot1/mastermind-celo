@@ -69,7 +69,9 @@ export default function MastermindGame() {
               mode={mode}
               hasActiveOnChainGame={hasActiveOnChainGame}
               onPlayOnChain={playOnChain}
+              onAbandonGame={abandonGame}
               gameIsPending={isPending}
+              abandonPending={isPending}
             />
           </div>
         )}

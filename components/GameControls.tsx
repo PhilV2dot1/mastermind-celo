@@ -29,26 +29,6 @@ export function GameControls({
 }: GameControlsProps) {
   return (
     <div className="flex flex-col gap-2">
-      {/* Abandon Game Button (on-chain mode, has active game) */}
-      {mode === 'onchain' && isConnected && hasActiveOnChainGame && onAbandonGame && (
-        <div className="bg-white/90 backdrop-blur-sm border border-orange-400 rounded-lg p-3 shadow-sm">
-          <p className="text-orange-800 text-xs font-semibold mb-1">
-            ⚠️ Active on-chain game detected
-          </p>
-          <p className="text-orange-700 text-xs mb-2">
-            Abandon incomplete game to start fresh.
-          </p>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={onAbandonGame}
-            disabled={disabled}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95"
-          >
-            {disabled ? 'ABANDONING...' : 'ABANDON GAME'}
-          </motion.button>
-        </div>
-      )}
-
       {/* New Game Button (free mode or after game ends) */}
       {(mode === 'free' || gamePhase !== 'playing') && (
         <motion.button
