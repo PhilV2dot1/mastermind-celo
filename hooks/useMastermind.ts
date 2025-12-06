@@ -41,6 +41,7 @@ export function useMastermind() {
   const [history, setHistory] = useState<GameHistory[]>([]);
   const [attempts, setAttempts] = useState(0);
   const [message, setMessage] = useState('');
+  const [lastTransactionType, setLastTransactionType] = useState<'startGame' | 'submitScore' | null>(null);
 
   // Stats (for display)
   const [freeStats, setFreeStats] = useState<GameStats>({
@@ -123,6 +124,7 @@ export function useMastermind() {
   useEffect(() => {
     if (receipt) {
       console.log('✅ Transaction receipt received:', receipt.transactionHash);
+      console.log('Transaction type:', lastTransactionType);
 
       // Show success message
       setMessage('✅ Transaction completed successfully!');
@@ -147,11 +149,18 @@ export function useMastermind() {
           refetchStats();
         }, 2000);
 
-        // Reset game after giving time for refetches
-        setTimeout(() => {
-          console.log('🎮 Resetting game state');
-          newGame();
-        }, 2500);
+        // Only reset game after submitScore (abandon or real score)
+        // Don't reset after startGame - user needs to play!
+        if (lastTransactionType === 'submitScore') {
+          setTimeout(() => {
+            console.log('🎮 Resetting game state after score submission');
+            newGame();
+            setLastTransactionType(null);
+          }, 2500);
+        } else if (lastTransactionType === 'startGame') {
+          console.log('✅ Game started - ready to play!');
+          setLastTransactionType(null);
+        }
       };
 
       refetchData();
@@ -160,7 +169,7 @@ export function useMastermind() {
         setMessage('');
       }, 3000);
     }
-  }, [receipt, refetchStats, refetchActiveGame]);
+  }, [receipt, refetchStats, refetchActiveGame, lastTransactionType]);
 
   // Handle write contract errors
   useEffect(() => {
@@ -315,6 +324,9 @@ export function useMastermind() {
       setMessage('🎲 Starting your on-chain game...');
       console.log('📤 Sending startGame transaction...');
 
+      // Mark this as a startGame transaction
+      setLastTransactionType('startGame');
+
       writeContract({
         address: CONTRACT_ADDRESS,
         abi: CONTRACT_ABI,
@@ -393,6 +405,9 @@ export function useMastermind() {
         gas: BigInt(200000),
       });
 
+      // Mark this as a submitScore transaction
+      setLastTransactionType('submitScore');
+
       writeContract({
         address: CONTRACT_ADDRESS,
         abi: CONTRACT_ABI,
@@ -446,6 +461,9 @@ export function useMastermind() {
 
       setMessage('⏳ Abandoning game on-chain...');
       console.log('📤 Submitting score 0 to reset game state');
+
+      // Mark this as a submitScore transaction (abandon counts as submit)
+      setLastTransactionType('submitScore');
 
       // Submit score of 0 to reset the game state
       writeContract({
