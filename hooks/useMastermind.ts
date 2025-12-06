@@ -96,18 +96,48 @@ export function useMastermind() {
   // Check if user has an active on-chain game (compute early)
   const hasActiveOnChainGame = activeGameData ? activeGameData[0] : false;
 
+  // Debug logging for active game state
+  useEffect(() => {
+    if (mode === 'onchain' && isConnected) {
+      console.log('🎮 Active game state:', { hasActiveOnChainGame, activeGameData });
+    }
+  }, [hasActiveOnChainGame, activeGameData, mode, isConnected]);
+
+  // Refetch active game state when wallet connects or address changes
+  useEffect(() => {
+    if (isConnected && address && mode === 'onchain') {
+      console.log('🔄 Wallet connected, refetching active game state...');
+      const timer = setTimeout(() => {
+        refetchActiveGame();
+        refetchStats();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isConnected, address, mode, refetchActiveGame, refetchStats]);
+
   // Handle transaction receipt
   useEffect(() => {
     if (receipt) {
-      // Refetch active game state after any transaction
-      refetchActiveGame();
-      refetchStats();
+      console.log('✅ Transaction receipt received:', receipt.transactionHash);
 
       // Show success message
       setMessage('✅ Transaction completed successfully!');
 
-      // Reset game state after transaction
-      newGame();
+      // Refetch active game state and stats
+      const refetchData = async () => {
+        console.log('🔄 Refetching active game and stats...');
+        await refetchActiveGame();
+        await refetchStats();
+        console.log('✅ Refetch completed');
+
+        // Small delay to ensure state updates, then reset game
+        setTimeout(() => {
+          console.log('🎮 Resetting game state');
+          newGame();
+        }, 500);
+      };
+
+      refetchData();
 
       setTimeout(() => {
         setMessage('');
@@ -226,9 +256,14 @@ export function useMastermind() {
     if (newMode === 'onchain') {
       setMessage('🎮 On-Chain Mode: Play and submit your score to the blockchain!');
       setTimeout(() => setMessage(''), 3000);
+      // Refetch active game state when switching to onchain mode
+      setTimeout(() => {
+        refetchActiveGame();
+        refetchStats();
+      }, 100);
     }
     newGame();
-  }, [newGame]);
+  }, [newGame, refetchActiveGame, refetchStats]);
 
   // Start on-chain game
   const playOnChain = useCallback(async () => {
