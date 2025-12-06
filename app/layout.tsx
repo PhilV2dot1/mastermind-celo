@@ -14,13 +14,26 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mastermind on Celo",
     description: "Crack the 4-color code in 10 attempts. Play free or compete on-chain!",
-    images: [{ url: `${baseUrl}/og-image.png`, width: 1200, height: 630 }],
+    images: [
+      {
+        url: `${baseUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Mastermind on Celo - Crack the Code",
+      },
+    ],
+    type: "website",
+    siteName: "Mastermind on Celo",
   },
   twitter: {
     card: "summary_large_image",
     title: "Mastermind on Celo",
     description: "Crack the code on-chain with Farcaster!",
     images: [`${baseUrl}/og-image.png`],
+  },
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
   },
   other: {
     "fc:miniapp": JSON.stringify({
