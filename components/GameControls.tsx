@@ -49,21 +49,6 @@ export function GameControls({
         </div>
       )}
 
-      {/* Start On-Chain Game Button (on-chain mode, connected, at start, NO active game) */}
-      {mode === 'onchain' && isConnected && onPlayOnChain && gamePhase === 'playing' && !hasActiveOnChainGame && (
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          onClick={onPlayOnChain}
-          disabled={disabled}
-          className="w-full bg-gradient-to-r from-celo-yellow to-yellow-400 hover:from-yellow-400 hover:to-yellow-500 text-gray-900 font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95"
-          style={{
-            boxShadow: "0 0 0 2px #FCFF52, 0 10px 15px -3px rgba(0, 0, 0, 0.2)"
-          }}
-        >
-          {disabled ? 'STARTING...' : 'START GAME (0.01 CELO)'}
-        </motion.button>
-      )}
-
       {/* New Game Button (free mode or after game ends) */}
       {(mode === 'free' || gamePhase !== 'playing') && (
         <motion.button
