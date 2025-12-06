@@ -3,8 +3,22 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 
 // Auto-detect production URL or use environment variable
-const baseUrl = process.env.NEXT_PUBLIC_URL ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+const getBaseUrl = () => {
+  // Priority 1: Explicit environment variable
+  if (process.env.NEXT_PUBLIC_URL) {
+    return process.env.NEXT_PUBLIC_URL;
+  }
+
+  // Priority 2: Vercel automatic URL (only in production)
+  if (process.env.VERCEL_ENV === 'production' && process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  // Priority 3: Localhost fallback
+  return 'http://localhost:3000';
+};
+
+const baseUrl = getBaseUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
